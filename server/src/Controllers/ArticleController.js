@@ -202,6 +202,46 @@ const fetchPriortyArticles = async (limit, obj) => {
   }
 };
 
+const getArticleByIdAndSlug = async (req, res) => {
+  try {
+    const { id, slug } = req.params;
+    // console.log("atul test",id,slug);
+   
+    if (!id || !slug) {
+      return res.status(400).json({
+        success: false,
+        message: 'Both article ID and slug are required'
+      });
+    }
+
+  
+    const article = await Article.findOne({
+      _id: id,
+      slug: slug
+    });
+
+    if (!article) {
+      return res.status(404).json({
+        success: false,
+        message: 'Article not found with the provided ID and slug combination'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: article
+    });
+
+  } catch (error) {
+    console.error('Error fetching article:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while fetching article',
+      error: error.message
+    });
+  }
+};
+
 const getArticle = async (req, res) => {
   let {
     approved,
@@ -224,7 +264,7 @@ const getArticle = async (req, res) => {
     url,
   } = req.query;
  
-  console.log("id", id)
+   console.log("id", category)
   let obj = { approved: false };
 
   if (approved) {
@@ -591,7 +631,7 @@ const PostArticle = async (req, res) => {
   let date = new Date();
   date = JSON.stringify(date).split("T")[0].split('"')[1];
 
-  let idPrefix = "LOK";
+  //let idPrefix = "LOK";
   let translatedTopic = topic;
 
   try {
@@ -602,8 +642,7 @@ const PostArticle = async (req, res) => {
   }
 
   const customId =
-    idPrefix +
-    translatedTopic.substring(0, 3).toUpperCase() +
+    translatedTopic +
     Date.now().toString().substring(0, 10);
 
   console.log("Custom ID:", customId);
@@ -1278,6 +1317,7 @@ const dashBoardCategoryArticles = async (req, res) => {
 };
 
 export {
+  getArticleByIdAndSlug,
   getArticle,
   adminGetArticle,
   PostArticle,

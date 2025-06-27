@@ -34,6 +34,7 @@ import {
   dashBoardTopStories,
   dashBoardUpload,
   getArticle,
+  getArticleByIdAndSlug,
   getSubCategory,
   imageUpload,
   shareUrl,
@@ -115,6 +116,7 @@ route.route("/register").put(changeRegister);
 route.route("/user").get(getUser).delete(DeleteUser);
 route.route("/article").get(getArticle).delete(DeleteArticle);
 route.route("/article/:id").put(approvedArticle).post(PostArticle);
+route.route("/article/:id/:slug").get(getArticleByIdAndSlug)
 // route.route("/article").get(getArticle).delete(DeleteArticle);
 route.route("/shareUrl").get(shareUrl);
 
